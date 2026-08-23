@@ -1,2 +1,3 @@
 Hello from GitHub Actions!
 This is sample data in input/ data.txt
+This is the text, appended after copying and renaming the file
