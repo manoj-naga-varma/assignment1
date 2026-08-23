@@ -33,6 +33,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Reset the directories
+
+        run: |
+          rm -rf input output
+        
+      
       # 2. Create input/data.txt
       - name: Create input file
         run: |
