@@ -3,11 +3,11 @@ name: Copy and Rename file Workflow
 
 #This defines the event which triggers the workflow when a specific event happens.
 on:
-#This is the actual event which is supposed to trigger the workflow
-  push:
-  #This says, trigger the workflow when a push event happens only in the 'main' branch
-    branches:
-      - main
+# #This is the actual event which is supposed to trigger the workflow
+#   push:
+#   #This says, trigger the workflow when a push event happens only in the 'main' branch
+#     branches:
+#       - main
   #This allows you to trigger the workflow manually also, from the GitHub Actions tab.
   workflow_dispatch:
 
@@ -78,7 +78,7 @@ jobs:
           git add --all
 
           #Committing the changes into the repository, so that 
-          #we can check the file contents even after running the workflow
+          #We can check the file contents even after running the workflow
           git commit -m "Add processed files into the repository"
 
           git push
