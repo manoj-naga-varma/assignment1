@@ -1,0 +1,2 @@
+Hello from GitHub Actions!
+This is sample data in input/ data.txt
