@@ -4,7 +4,11 @@ on:
   push:
     branches:
       - main
+
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   process-file:
@@ -12,7 +16,11 @@ jobs:
 
     steps:
 
-      # 1. Create input/data.txt with sample text
+      # 1. Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Create input/data.txt
       - name: Create input file
         run: |
           mkdir -p input
@@ -20,14 +28,8 @@ jobs:
           echo "This is sample data for file processing." >> input/data.txt
           echo "File processing workflow completed successfully." >> input/data.txt
 
-      # 2. Display the original file
-      - name: Display original file
-        run: |
-          echo "===== Original File ====="
-          cat input/data.txt
-
-      # 3. Copy data.txt to output folder
-      - name: Copy file to output folder
+      # 3. Create output directory and copy the file
+      - name: Copy file to output
         run: |
           mkdir -p output
           cp input/data.txt output/data.txt
@@ -37,15 +39,33 @@ jobs:
         run: |
           mv output/data.txt output/processed.txt
 
-      # 5. Print processed.txt contents in workflow logs
+      # 5. Print file contents in workflow logs
       - name: Print processed file contents
         run: |
-          echo "===== Processed File ====="
+          echo "===== processed.txt ====="
           cat output/processed.txt
 
-      # 6. Upload processed.txt as GitHub Actions artifact
-      - name: Upload processed file
+      # 6. Show directory structure
+      - name: Show generated files
+        run: |
+          echo "===== Repository Structure ====="
+          find input output -type f -print
+
+      # 7. Upload processed.txt as an artifact
+      - name: Upload processed file as artifact
         uses: actions/upload-artifact@v4
         with:
           name: processed-file
           path: output/processed.txt
+
+      # 8. Commit generated files back to GitHub
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add input/data.txt output/processed.txt
+
+          git diff --cached --quiet || git commit -m "Add processed files"
+
+          git push
