@@ -75,7 +75,7 @@ jobs:
           git config user.name "Manoj Naga Varma Chekuri"
           git config user.email "manojnagavarma@gmail.com"
 
-          git add input/data.txt output/processed.txt
+          git add --all
 
           #Committing the changes into the repository, so that 
           #we can check the file contents even after running the workflow
