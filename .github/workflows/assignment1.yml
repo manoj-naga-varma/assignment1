@@ -32,20 +32,7 @@ jobs:
       #By this checkout step, your project code will be downloaded into the VM runner
       - name: Checkout repository
         uses: actions/checkout@v4
-
-
-      - name: Reset the directories
-        run: |
-          rm -rf input output
-        
-      
-      # 2. Create input/data.txt
-      - name: Create input file
-        run: |
-          mkdir -p input
-          echo "========= Creating input/data.txt, and adding contents into it ========="
-          echo "Hello from GitHub Actions!" > input/data.txt
-          echo "This is sample data in input/ data.txt" >> input/data.txt
+    
 
       # 3. Create output directory and copy the file
       - name: Copy file to output
@@ -73,18 +60,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: processed-file
-          path: output/processed.txt
-
-      # 7. Commit generated files back to GitHub
-      - name: Commit generated files
-        run: |
-          git config user.name "Manoj Naga Varma Chekuri"
-          git config user.email "manojnagavarma@gmail.com"
-
-          git add --all
-
-          #Committing the changes into the repository, so that 
-          #We can check the file contents even after running the workflow
-          git commit -m "Add processed files into the repository"
-
-          git push
+          path: processed.txt
