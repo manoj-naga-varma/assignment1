@@ -58,8 +58,9 @@ jobs:
       - name: Print processed file contents
         run: |
           echo "========= Printing the contents of output/processed.txt ========="
-          cat output/processed.txt
           echo "This is the text, appended after copying and renaming the file" >> output/processed.txt
+          cat output/processed.txt
+
 
       # 6. Upload processed.txt as an artifact
       - name: Upload processed file as artifact
