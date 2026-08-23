@@ -1,22 +1,35 @@
-name: File Processing
+#This is the workflow name
+name: Copy and Rename file Workflow
 
+#This defines the event which triggers the workflow when a specific event happens.
 on:
+#This is the actual event which is supposed to trigger the workflow
   push:
+  #This says, trigger the workflow when a push event happens only in the 'main' branch
     branches:
       - main
-
+  #This allows you to trigger the workflow manually also, from the GitHub Actions tab.
   workflow_dispatch:
 
+#SO, WE HAVE 2 TRIGGERS NOW
+#1. WHEN SOMEONE PUSHES THE CHANGES INTO THE 'main' BRANCH OF repository
+#2. WHEN SOMEONE MANUALLY STARTS THE WORKFLOW, FROM GitHub Actions TAB.
+  
+#Since your workflow involves creating directories, reading contents, make changes to it,
+#So, write permissions is needed.
 permissions:
   contents: write
 
 jobs:
+#This is the job ID
   process-file:
+  #This is the Virtual Machine of a particular OS and version, in which this job runs
     runs-on: ubuntu-latest
 
     steps:
-
+    #Here, the series of tasks are listed one by one in a sequential order
       # 1. Checkout the repository
+      #By this checkout step, your project code will be downloaded into the VM runner
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -24,48 +37,46 @@ jobs:
       - name: Create input file
         run: |
           mkdir -p input
+          echo "========= Creating input/data.txt, and adding contents into it ========="
           echo "Hello from GitHub Actions!" > input/data.txt
-          echo "This is sample data for file processing." >> input/data.txt
-          echo "File processing workflow completed successfully." >> input/data.txt
+          echo "This is sample data in input/ data.txt" >> input/data.txt
 
       # 3. Create output directory and copy the file
       - name: Copy file to output
         run: |
           mkdir -p output
+          echo "========= Created output/, and copying the file data.txt into output/ ========="
           cp input/data.txt output/data.txt
 
       # 4. Rename data.txt to processed.txt
       - name: Rename file
         run: |
           mv output/data.txt output/processed.txt
+          echo "========= Renamed the file data.txt to processed.txt ========="
 
       # 5. Print file contents in workflow logs
       - name: Print processed file contents
         run: |
-          echo "===== processed.txt ====="
+          echo "========= Printing the contents of output/processed.txt ========="
           cat output/processed.txt
 
-      # 6. Show directory structure
-      - name: Show generated files
-        run: |
-          echo "===== Repository Structure ====="
-          find input output -type f -print
-
-      # 7. Upload processed.txt as an artifact
+      # 6. Upload processed.txt as an artifact
       - name: Upload processed file as artifact
         uses: actions/upload-artifact@v4
         with:
           name: processed-file
           path: output/processed.txt
 
-      # 8. Commit generated files back to GitHub
+      # 7. Commit generated files back to GitHub
       - name: Commit generated files
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "Manoj Naga Varma Chekuri"
+          git config user.email "manojnagavarma@gmail.com"
 
           git add input/data.txt output/processed.txt
 
-          git diff --cached --quiet || git commit -m "Add processed files"
+          #Committing the changes into the repository, so that 
+          #we can check the file contents even after running the workflow
+          git commit -m "Add processed files into the repository"
 
           git push
