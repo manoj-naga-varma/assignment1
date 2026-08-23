@@ -1,0 +1,51 @@
+name: File Processing
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  process-file:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # 1. Create input/data.txt with sample text
+      - name: Create input file
+        run: |
+          mkdir -p input
+          echo "Hello from GitHub Actions!" > input/data.txt
+          echo "This is sample data for file processing." >> input/data.txt
+          echo "File processing workflow completed successfully." >> input/data.txt
+
+      # 2. Display the original file
+      - name: Display original file
+        run: |
+          echo "===== Original File ====="
+          cat input/data.txt
+
+      # 3. Copy data.txt to output folder
+      - name: Copy file to output folder
+        run: |
+          mkdir -p output
+          cp input/data.txt output/data.txt
+
+      # 4. Rename data.txt to processed.txt
+      - name: Rename file
+        run: |
+          mv output/data.txt output/processed.txt
+
+      # 5. Print processed.txt contents in workflow logs
+      - name: Print processed file contents
+        run: |
+          echo "===== Processed File ====="
+          cat output/processed.txt
+
+      # 6. Upload processed.txt as GitHub Actions artifact
+      - name: Upload processed file
+        uses: actions/upload-artifact@v4
+        with:
+          name: processed-file
+          path: output/processed.txt
