@@ -86,3 +86,4 @@ jobs:
             echo "===== Changes detected. Committing files. ====="
             git commit -m "Add processed files into the repository"
             git push
+          fi
