@@ -32,8 +32,13 @@ jobs:
       #By this checkout step, your project code will be downloaded into the VM runner
       - name: Checkout repository
         uses: actions/checkout@v4
-    
 
+      - name: Create input directory
+        run: |
+          mkdir -p input
+          echo "This is sample text, generated after creating the directory in YAML." > input/data.txt
+          cat input/data.txt
+          
       # 3. Create output directory and copy the file
       - name: Copy file to output
         run: |
