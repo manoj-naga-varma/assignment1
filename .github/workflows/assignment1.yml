@@ -58,7 +58,7 @@ jobs:
           echo "========= Printing the contents of output/processed.txt ========="
           echo "This is the text, appended after copying and renaming the file" >> output/processed.txt
           cat output/processed.txt
-
+    
 
       # 6. Upload processed.txt as an artifact
       - name: Upload processed file as artifact
@@ -66,3 +66,23 @@ jobs:
         with:
           name: processed-file
           path: output/processed.txt
+          
+      - name: Commit generated files
+        run: |
+          git config user.name "Manoj Naga Varma Chekuri"
+          git config user.email "manojkingvarma@gmail.com"
+      
+          echo "===== Git status before commit ====="
+          git status
+      
+          git add --all
+      
+          echo "===== Git status after git add ====="
+          git status
+      
+          if git diff --cached --quiet; then
+            echo "===== No changes detected. Nothing to commit. ====="
+          else
+            echo "===== Changes detected. Committing files. ====="
+            git commit -m "Add processed files into the repository"
+            git push
